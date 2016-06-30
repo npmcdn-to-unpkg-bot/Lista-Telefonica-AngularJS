@@ -8,20 +8,20 @@
   <link rel="stylesheet" href="bootstrap-3.3.6-dist/css/bootstrap.css" charset="utf-8">
   <script>
   var app = angular.module('listaTelefonica', ["ngMessages"]);
-  app.controller("listaTelefonicaCtrl", function($scope){
+  app.controller("listaTelefonicaCtrl", function($scope, uppercaseFilter){
     $scope.app = "Lista Telefonica";
     $scope.contatos = [];
     $scope.contatos = [
-      {nome: 'Roberto', telefone:99998888, data: new Date(),operadora: {nome: "Oi", codigo:14,categoria:"Celular"} },
+      {nome: uppercaseFilter("Roberto"), telefone:99998888, data: new Date(),operadora: {nome: "Oi", codigo:14,categoria:"Celular"} },
       {nome: 'Ana', telefone:99998877, data: new Date(), operadora: {nome: "Tim", codigo:41,categoria:"Celular"}  },
       {nome: 'Maria', telefone:99998866, data: new Date(), operadora: {nome: "GVT", codigo:12,categoria:"Fixo"} }
     ];
     $scope.operadoras = [
-      {nome: "Oi", codigo: 14, categoria: "Celular"},
-      {nome: "Vivo", codigo: 15, categoria: "Celular"},
-      {nome: "Tim", codigo: 41, categoria: "Celular"},
-      {nome: "GVT", codigo: 12, categoria: "Fixo"},
-      {nome: "Embratel", codigo: 21, categoria: "Fixo"},
+      {nome: "Oi", codigo: 14, categoria: "Celular", preco: 2},
+      {nome: "Vivo", codigo: 15, categoria: "Celular", preco: 1},
+      {nome: "Tim", codigo: 41, categoria: "Celular", preco: 3 },
+      {nome: "GVT", codigo: 12, categoria: "Fixo", preco: 2},
+      {nome: "Embratel", codigo: 21, categoria: "Fixo", preco: 1},
     ];
     $scope.adicionarContato = function (contato) {
       $scope.contatos.push(angular.copy(contato));
@@ -88,7 +88,7 @@
       </tr>
       <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
         <th><input type="checkbox" ng-model="contato.selecionado"></th>
-        <td>{{contato.nome | uppercase}}</td>
+        <td>{{contato.nome}}</td>
         <td>{{contato.telefone}}</td>
         <td>{{contato.operadora.nome}}</td>
         <td>{{contato.data | date:'dd/MM/yyyy HH:mm'}}</td>
@@ -121,6 +121,7 @@
     </div>
     <button  class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar Contato</button>
     <button  class="btn btn-danger btn-block" ng-click="apagarContato(contatos)" ng-disabled="!isContatoSelecionado(contatos)">Remover Contato</button>
+    {{100.96 | number:2}}
   </div>
   <!-- <div ng-include="'footer.html'"></div> -->
 </body>
