@@ -24,8 +24,12 @@
     	{nome: "Embratel", codigo: 21, categoria: "Fixo", preco: 2}
     ];
     var carregarContatos = function (){
-      $http.get('http://localhost:3000/contatos');
+      $http.get('http://localhost:3000/contatos')
+      .success(function(data,status){
+        $scope.contatos = data;
+      });
     };
+        
     $scope.adicionarContato = function (contato) {
       $scope.contatos.push(angular.copy(contato));
       delete $scope.contato;

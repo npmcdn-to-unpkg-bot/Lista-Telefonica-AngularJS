@@ -1,5 +1,11 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var port = process.env.PORT || 3000;
 
 var contatos = [
 	{nome: "Bruno", telefone: "9999-2222", data: new Date(), operadora: {nome: "Oi", codigo: 14, categoria: "Celular"}},
@@ -14,8 +20,14 @@ var operadoras = [
 	{nome: "Embratel", codigo: 21, categoria: "Fixo", preco: 2}
 ];
 
+app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 
-app.get('/contatos', function (req, res) {
+app.get('/contatos', function(req, res) {
   res.json(contatos);
 });
 
@@ -28,6 +40,8 @@ app.get('/operadoras', function (req, res) {
   res.json(operadoras);
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.listen(port);
+console.log('Magic happens on port ' + port);
+// app.listen(3000, function () {
+//   console.log('Example app listening on port 3000!');
+// });
