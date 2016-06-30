@@ -38,12 +38,16 @@
         return contato.selecionado;
       });
     };
+    $scope.ordenarPor = function (campo){
+      $scope.criterioDeOrdenacao = campo;
+      $scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;
+    };
 
   });
   </script>
   <style>
   .jumbotron{
-    width: 600px;
+    width: 500px;
     text-align: center;
     margin-top: 20px;
     margin-left: auto;
@@ -54,6 +58,9 @@
   }
   .form-control{
     margin-top:20px;
+  }
+  th{
+    text-align: center;
   }
   .selecionado{
     background-color: yellow;
@@ -71,15 +78,15 @@
     <h3>{{app}}</h3>
     <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você está buscando?">
     </input>
-    <table class="table">
+    <table class="table table-striped table-bordered">
       <tr>
         <th></th>
-        <th>Nome</th>
-        <th>Telefone</th>
+        <th><a href="" ng-click="ordenarPor(nome)">Nome</a></th>
+        <th><a href="" ng-click="ordenarPor(telefone)">Telefone</a></th>
         <th>Operadora</th>
         <th>Data</th>
       </tr>
-      <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca">
+      <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
         <th><input type="checkbox" ng-model="contato.selecionado"></th>
         <td>{{contato.nome | uppercase}}</td>
         <td>{{contato.telefone}}</td>
@@ -91,7 +98,7 @@
     <form name="contatoForm">
       <input  class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10"></input>
       <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/"></input>
-      <select  class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
+      <select  class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras | orderBy: 'nome'">
         <option value="">Seleciona uma operadora</option>
       </select>
     </form>
