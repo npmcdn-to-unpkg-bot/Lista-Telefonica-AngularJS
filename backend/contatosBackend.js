@@ -40,8 +40,10 @@ app.get('/operadoras', function (req, res) {
   res.json(operadoras);
 });
 
-app.listen(port);
-console.log('Magic happens on port ' + port);
+app.listen(port,function(){
+		console.log('Magic happens on port ' + port);
+});
+
 // app.listen(3000, function () {
 //   console.log('Example app listening on port 3000!');
 // });

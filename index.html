@@ -16,24 +16,31 @@
     //   {nome: 'Ana', telefone:99998877, data: new Date(), operadora: {nome: "Tim", codigo:41,categoria:"Celular"}  },
     //   {nome: 'Maria', telefone:99998866, data: new Date(), operadora: {nome: "GVT", codigo:12,categoria:"Fixo"} }
     // ];
-    $scope.operadoras = [
-    	{nome: "Oi", codigo: 14, categoria: "Celular", preco: 2},
-    	{nome: "Vivo", codigo: 15, categoria: "Celular", preco: 1},
-    	{nome: "Tim", codigo: 41, categoria: "Celular", preco: 3},
-    	{nome: "GVT", codigo: 25, categoria: "Fixo", preco: 1},
-    	{nome: "Embratel", codigo: 21, categoria: "Fixo", preco: 2}
-    ];
+    $scope.operadoras = [];
     var carregarContatos = function (){
       $http.get('http://localhost:3000/contatos')
-      .success(function(data,status){
+      .success(function(data){
         $scope.contatos = data;
+      }).error(function(data){
+        $scope.message = "Aconteceu um problema: " + data;
       });
     };
-        
+    var carregarOperadoras = function(){
+      $http.get('http://localhost:3000/operadoras')
+      .success(function(data){
+        $scope.operadoras = data;
+      })
+    }
     $scope.adicionarContato = function (contato) {
-      $scope.contatos.push(angular.copy(contato));
-      delete $scope.contato;
-      $scope.contatoForm.$setPristine();
+      contato.data = new Date();
+      $http.post("http://localhost:3000/contatos",contato)
+      .success(function(data){
+        delete $scope.contato;
+        $scope.contatoForm.$setPristine();
+        carregarContatos();
+      });
+      // $scope.contatos.push(angular.copy(contato));
+
     };
     $scope.apagarContato = function (contatos){
       $scope.contatos =  contatos.filter(function (contato) {
@@ -50,6 +57,7 @@
       $scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;
     };
     carregarContatos();
+    carregarOperadoras();
 
   });
   </script>
@@ -84,6 +92,7 @@
 <body ng-controller="listaTelefonicaCtrl">
   <div class="jumbotron">
     <h3>{{app}}</h3>
+    {{message}}
     <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você está buscando?">
     </input>
     <table class="table table-striped table-bordered">
